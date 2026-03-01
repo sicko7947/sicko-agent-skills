@@ -2,23 +2,14 @@
   "name": "agent-skills",
   "description": "A collection of reusable skills for AI coding agents — PR management, Gemini File Search reference, and more.",
   "version": "1.0.0",
-  "author": {
+  "owner": {
     "name": "sicko7947"
   },
-  "repository": {
-    "url": "https://github.com/sicko7947/agent-skills"
-  },
-  "license": "MIT",
-  "skills": [
+  "plugins": [
     {
-      "name": "pr-manager",
-      "description": "Automates creating PRs, monitoring for reviews, running codebase validation, implementing feedback, and waiting for all reviewers to finish.",
-      "path": "skills/pr-manager/SKILL.md"
-    },
-    {
-      "name": "gemini-file-search",
-      "description": "Reference for building, debugging, or querying Google Gemini File Search API with managed RAG, FileSearchStores, and document upload.",
-      "path": "skills/gemini-file-search/SKILL.md"
+      "name": "agent-skills",
+      "description": "PR management, Gemini File Search reference, and more skills for AI coding agents.",
+      "source": "."
     }
   ]
 }
