@@ -1,12 +1,12 @@
 {
-  "name": "agent-skills",
+  "name": "sicko-agent-skills",
   "description": "A collection of reusable skills for AI coding agents — PR management, Gemini File Search reference, and more.",
   "version": "1.0.0",
   "author": {
     "name": "sicko7947"
   },
   "repository": {
-    "url": "https://github.com/sicko7947/agent-skills"
+    "url": "https://github.com/sicko7947/sicko-agent-skills"
   },
   "license": "MIT"
 }

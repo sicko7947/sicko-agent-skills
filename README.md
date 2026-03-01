@@ -1,4 +1,4 @@
-# Agent Skills
+# Sicko Agent Skills
 
 A collection of reusable skills for AI coding agents.
 
@@ -14,19 +14,19 @@ A collection of reusable skills for AI coding agents.
 ### Claude Code (Plugin)
 
 ```bash
-/plugin install https://github.com/sicko7947/agent-skills
+/plugin install https://github.com/sicko7947/sicko-agent-skills
 ```
 
-Skills are automatically available as `/agent-skills:pr-manager` and `/agent-skills:gemini-file-search`.
+Skills are automatically available as `/sicko-agent-skills:pr-manager` and `/sicko-agent-skills:gemini-file-search`.
 
 ### Manual
 
 Symlink individual skills into `~/.claude/skills/`:
 
 ```bash
-git clone https://github.com/sicko7947/agent-skills.git ~/.agents/agent-skills
-ln -s ~/.agents/agent-skills/skills/pr-manager ~/.claude/skills/pr-manager
-ln -s ~/.agents/agent-skills/skills/gemini-file-search ~/.claude/skills/gemini-file-search
+git clone https://github.com/sicko7947/sicko-agent-skills.git ~/.agents/sicko-agent-skills
+ln -s ~/.agents/sicko-agent-skills/skills/pr-manager ~/.claude/skills/pr-manager
+ln -s ~/.agents/sicko-agent-skills/skills/gemini-file-search ~/.claude/skills/gemini-file-search
 ```
 
 ## License
