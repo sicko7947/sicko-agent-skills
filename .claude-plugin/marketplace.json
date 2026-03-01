@@ -9,7 +9,10 @@
     {
       "name": "agent-skills",
       "description": "PR management, Gemini File Search reference, and more skills for AI coding agents.",
-      "source": "."
+      "source": {
+        "source": "github",
+        "repo": "sicko7947/agent-skills"
+      }
     }
   ]
 }
