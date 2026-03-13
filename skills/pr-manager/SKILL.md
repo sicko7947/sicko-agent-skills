@@ -28,7 +28,21 @@ gh pr list --head "$(git branch --show-current)" --json url,number
 gh pr create --title "feat: <title>" --body "Automated PR created by Agent"
 ```
 
-### 2. Monitor for Reviews
+### 2. Wait for CI to Pass
+
+After creating the PR, CI checks run automatically. Wait for them before requesting reviews.
+
+```bash
+# Watch CI status — polls until all checks pass or any fails
+gh pr checks "$(gh pr view --json number -q .number)" --watch
+
+# Or check current status
+gh pr checks "$(gh pr view --json number -q .number)"
+```
+
+If any check fails, fix the issue locally, commit, and push. CI will re-run automatically. Do not proceed to review monitoring until all CI checks are green.
+
+### 3. Monitor for Reviews
 
 Use the `scripts/monitor_pr.py` script to wait for new review activity. The script polls the PR every 15 seconds with a **20-minute timeout** and **waits for ALL requested reviewers to finish** before returning.
 
@@ -46,7 +60,7 @@ python3 skills/pr-manager/scripts/monitor_pr.py "$PR_URL" --interval 15 --timeou
 
 **Important:** If the script detects new activity but a reviewer is still pending, it continues waiting. It only exits successfully when every requested reviewer has submitted their review. If timeout is reached with a pending reviewer, re-run the monitor to keep waiting.
 
-### 3. Analyze Feedback
+### 4. Analyze Feedback
 
 When all reviewers have finished and new activity is detected:
 1. Parse the JSON output from `monitor_pr.py`.
@@ -63,7 +77,7 @@ When all reviewers have finished and new activity is detected:
         - **Medium:** Performance, Best Practices, Maintainability.
         - **Low/Nitpick:** Formatting (if linter exists), subjective style preferences.
 
-### 4. Implement Changes
+### 5. Implement Changes
 
 **Implement feedback selectively based on your critical evaluation.**
 
@@ -79,7 +93,7 @@ When all reviewers have finished and new activity is detected:
 
 **Crucial:** You are the owner of this PR. Do not blindly accept changes. If a reviewer is wrong, you must explain why in your reply instead of breaking the code.
 
-### 5. Validate the Codebase
+### 6. Validate the Codebase
 
 **Before committing any changes, run the appropriate validation commands for the codebase.** Detect the project type and run the relevant checks:
 
@@ -101,7 +115,7 @@ When all reviewers have finished and new activity is detected:
 3. Run the most relevant commands. If multiple apply, run all of them.
 4. If any validation fails, fix the issues before proceeding.
 
-### 6. Commit and Push
+### 7. Commit and Push
 
 After implementing changes and passing validation:
 
@@ -116,7 +130,7 @@ git commit -m "fix: address code review feedback"
 git push
 ```
 
-### 7. Reply to Comments
+### 8. Reply to Comments
 
 Reply to **every single comment individually** — one reply per review comment. **NEVER batch multiple responses into a single summary comment** (e.g., `gh pr comment` with a combined body). Each reviewer comment must get its own threaded reply so the conversation stays inline with the code.
 
@@ -147,7 +161,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{comment_id}/replies \
 - If a reply fails, retry that specific comment — do NOT fall back to a single summary comment.
 - Reply to comments **sequentially** (one at a time) to avoid rate limiting or sibling call errors.
 
-### 8. Loop or Finalize
+### 9. Loop or Finalize
 
 After pushing fixes and replying to all comments:
 
