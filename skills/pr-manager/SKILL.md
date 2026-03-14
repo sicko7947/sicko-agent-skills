@@ -20,12 +20,19 @@ Use this skill when:
 
 Ensure you are on the correct feature branch. Check if a PR already exists for this branch. If not, create one.
 
+**Target branch rules (Tendor monorepo):**
+- Feature branches (`feat/`, `fix/`, `chore/`, `refactor/`, `docs/`) → target **`main`**
+- Release/hotfix branches (`release/*`, `hotfix/*`) → target **`main`**
+
 ```bash
 # Check if PR exists
 gh pr list --head "$(git branch --show-current)" --json url,number
 
-# If no PR exists, create one (adjust title/body as needed)
-gh pr create --title "feat: <title>" --body "Automated PR created by Agent"
+# If no PR exists, create one targeting main (for feature work)
+gh pr create --title "feat: <title>" --base main --body "Automated PR created by Agent"
+
+# For release/hotfix branches, target main with the correct title format
+gh pr create --title "🚀 release: <date>" --base main --body "..."
 ```
 
 ### 2. Wait for CI to Pass
@@ -95,25 +102,34 @@ When all reviewers have finished and new activity is detected:
 
 ### 6. Validate the Codebase
 
-**Before committing any changes, run the appropriate validation commands for the codebase.** Detect the project type and run the relevant checks:
+**Before committing any changes, run the appropriate validation commands for the codebase.**
+
+**Tendor monorepo (Bun + Biome):**
+
+```bash
+bun run lint          # Biome lint — whole repo
+bun run check         # TypeScript typecheck — whole repo (or per-app below)
+bun run --cwd apps/web check    # web only
+bun run --cwd apps/api check    # api only
+bun run test:web      # web unit tests
+bun run test:api      # api unit tests
+```
+
+> Always use `bun run`, never `npm run` or `pnpm`.
+
+**Other project types:**
 
 | Indicator | Commands to Run |
 |-----------|----------------|
-| `package.json` with `lint` script | `npm run lint` or `pnpm lint` or `yarn lint` |
-| `package.json` with `check` script | `npm run check` or `pnpm check` |
-| `package.json` with `typecheck` script | `npm run typecheck` or `pnpm typecheck` |
-| `tsconfig.json` | `npx tsc --noEmit` (if no check/typecheck script exists) |
+| `package.json` with `lint` | `npm run lint` / `pnpm lint` / `yarn lint` |
+| `package.json` with `check` | `npm run check` / `pnpm check` |
+| `tsconfig.json` (no check script) | `npx tsc --noEmit` |
 | `go.mod` | `go mod tidy && go vet ./... && go build ./...` |
 | `Cargo.toml` | `cargo check && cargo clippy` |
-| `pyproject.toml` / `setup.py` | `ruff check .` or `flake8` or `pylint` (whichever is configured) |
-| `Makefile` with `lint` target | `make lint` |
-| `.eslintrc*` / `eslint.config.*` | `npx eslint .` (if no package.json lint script) |
+| `pyproject.toml` / `setup.py` | `ruff check .` or `flake8` / `pylint` |
+| `Makefile` with `lint` | `make lint` |
 
-**Detection strategy:**
-1. Check `package.json` scripts for `lint`, `check`, `typecheck`, `build` commands.
-2. Look for language-specific config files (`go.mod`, `Cargo.toml`, `pyproject.toml`).
-3. Run the most relevant commands. If multiple apply, run all of them.
-4. If any validation fails, fix the issues before proceeding.
+If any validation fails, fix the issues before proceeding.
 
 ### 7. Commit and Push
 
